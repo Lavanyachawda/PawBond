@@ -32,6 +32,7 @@ export default function RootLayout({ children }) {
                 { label: 'Browse Pets', href: '/listings' },
                 { label: 'List Your Pet', href: '/addpet' },
                 { label: 'How it Works', href: '/#how' },
+                { label: 'Dashboard', href: '/dashboard' },
               ].map(link => (
                 <a key={link.href} href={link.href} style={{
                   padding: '8px 14px', borderRadius: '50px',

@@ -60,6 +60,7 @@ export default function Listings() {
             placeholder="Search by pet name, breed or area..."
             value={search}
             onChange={e => setSearch(e.target.value)}
+            autoComplete="off"
             style={{
               width: '100%', padding: '16px 16px 16px 48px',
               borderRadius: '50px', border: 'none', fontSize: '15px',
@@ -155,7 +156,6 @@ export default function Listings() {
                     {pet.type === 'Dog' ? '🐶' : pet.type === 'Cat' ? '🐱' : pet.type === 'Bird' ? '🐦' : pet.type === 'Rabbit' ? '🐰' : '🐾'}
                   </div>
                 )}
-
                 <button onClick={(e) => { e.stopPropagation(); toggleSave(pet._id) }}
                   style={{
                     position: 'absolute', top: '12px', right: '12px',
@@ -166,7 +166,6 @@ export default function Listings() {
                   }}>
                   {saved.includes(pet._id) ? '❤️' : '🤍'}
                 </button>
-
                 <div style={{
                   position: 'absolute', top: '12px', left: '12px',
                   background: pet.available ? '#1D9E75' : '#999',
@@ -175,7 +174,6 @@ export default function Listings() {
                 }}>
                   {pet.available ? '● Available' : '● Busy'}
                 </div>
-
                 <div style={{
                   position: 'absolute', bottom: '12px', left: '12px',
                   background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(8px)',
@@ -200,7 +198,6 @@ export default function Listings() {
                   </div>
                 </div>
 
-                {/* Tags */}
                 {pet.tags && pet.tags.length > 0 && (
                   <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
                     {pet.tags.map((tag, i) => (
@@ -212,7 +209,6 @@ export default function Listings() {
                   </div>
                 )}
 
-                {/* Owner info */}
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px',
                   padding: '10px', background: '#fafafa', borderRadius: '10px' }}>
                   {pet.ownerImg ? (
@@ -232,7 +228,6 @@ export default function Listings() {
                   <div style={{ marginLeft: 'auto', fontSize: '12px', color: '#888' }}>📍 {pet.location}</div>
                 </div>
 
-                {/* Buttons */}
                 <div style={{ display: 'flex', gap: '8px' }}>
                   <button
                     onClick={() => router.push(`/listings/${pet._id}`)}

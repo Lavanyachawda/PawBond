@@ -1,10 +1,12 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import { useUser } from '@clerk/nextjs'
 
 export default function PetProfile() {
   const { id } = useParams()
   const router = useRouter()
+  const { user } = useUser()
   const [pet, setPet] = useState(null)
   const [loading, setLoading] = useState(true)
   const [booking, setBooking] = useState(false)
@@ -279,17 +281,41 @@ export default function PetProfile() {
                 </div>
 
                 <button
-                  onClick={() => {
-                    if (!selectedDate || !selectedTime) {
-                      alert('Please pick a date and time!')
-                      return
-                    }
-                    setBooking(true)
-                    setTimeout(() => {
-                      setBooking(false)
-                      setBookingDone(true)
-                    }, 1500)
-                  }}
+                  onClick={async () => {
+  if (!selectedDate || !selectedTime) {
+    alert('Please pick a date and time!')
+    return
+  }
+  setBooking(true)
+  try {
+    const res = await fetch('/api/bookings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        petId: pet._id,
+        petName: pet.name,
+        petImg: pet.img,
+        ownerId: pet.ownerId,
+        ownerName: pet.ownerName,
+        ownerEmail: pet.ownerEmail,
+        bookerName: user?.firstName + ' ' + (user?.lastName || ''),
+        bookerEmail: user?.emailAddresses[0]?.emailAddress,
+        bookerId: user?.id,
+        date: selectedDate,
+        time: selectedTime,
+        message: message,
+        price: pet.price,
+      })
+    })
+    const data = await res.json()
+    setBooking(false)
+    if (data.success) setBookingDone(true)
+    else alert('Booking failed: ' + JSON.stringify(data))
+  } catch (err) {
+    setBooking(false)
+    alert('Error: ' + err.message)
+  }
+}}
                   disabled={booking}
                   style={{ width: '100%', padding: '16px',
                     background: booking ? '#ccc' : 'linear-gradient(135deg, #667eea, #764ba2)',
